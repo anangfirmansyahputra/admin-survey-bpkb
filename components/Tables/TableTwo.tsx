@@ -54,7 +54,7 @@ const TableTwo = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.post(`${process.env.URL}/api/pagination`, {
+      const { data } = await axios.post(`/api/pagination`, {
         page,
       });
 
