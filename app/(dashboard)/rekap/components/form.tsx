@@ -71,7 +71,7 @@ export default function Form() {
         });
         return;
       } else {
-        const { data } = await axios.post("http://localhost:3000/api/getData", {
+        const { data } = await axios.post(`${process.env.URL}/api/getData`, {
           start: startDate,
           to: endDate,
         });

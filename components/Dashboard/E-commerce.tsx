@@ -15,14 +15,18 @@ const MapOne = dynamic(() => import("../Maps/MapOne"), {
   ssr: false,
 });
 
-
-
-const ECommerce = ({ lastData, totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: {
-  lastData: any[],
-  totalSangatPuas: any,
-  totalPuas: any,
-  totalCukup: any,
-  totalTidakPuas: any
+const ECommerce = ({
+  lastData,
+  totalCukup,
+  totalPuas,
+  totalSangatPuas,
+  totalTidakPuas,
+}: {
+  lastData: any[];
+  totalSangatPuas: any;
+  totalPuas: any;
+  totalCukup: any;
+  totalTidakPuas: any;
 }) => {
   const data = [
     {
@@ -62,7 +66,7 @@ const ECommerce = ({ lastData, totalCukup, totalPuas, totalSangatPuas, totalTida
             total={item.text}
             rate={item.value.toString()}
             levelUp>
-            <item.icon className="text-[#3C50E0]" />
+            <item.icon className="text-[#3C50E0] dark:text-white" />
           </CardDataStats>
         ))}
       </div>
@@ -74,7 +78,12 @@ const ECommerce = ({ lastData, totalCukup, totalPuas, totalSangatPuas, totalTida
         <div className="col-span-12 xl:col-span-7">
           <TableOne lastData={lastData} />
         </div>
-        <ChartThree totalCukup={totalCukup} totalPuas={totalPuas} totalSangatPuas={totalSangatPuas} totalTidakPuas={totalTidakPuas} />
+        <ChartThree
+          totalCukup={totalCukup}
+          totalPuas={totalPuas}
+          totalSangatPuas={totalSangatPuas}
+          totalTidakPuas={totalTidakPuas}
+        />
       </div>
     </>
   );

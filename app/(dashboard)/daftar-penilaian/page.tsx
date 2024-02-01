@@ -12,10 +12,20 @@ export const metadata: Metadata = {
 };
 
 const TablesPage = async () => {
-  const { data, error: err } = await supabase
-    .from("pelanggan")
-    .select()
-    .order("created_at", { ascending: false });
+  // const { data, error } = await supabase
+  //   .from("pelanggan")
+  //   .select()
+  //   .order("created_at", { ascending: false });
+
+  // const {
+  //   data: test,
+  //   error: err,
+  //   count,
+  // } = await supabase
+  //   .from("pelanggan")
+  //   .select("*", { count: "exact", head: true });
+
+  // console.log({ count });
 
   return (
     <>
@@ -23,7 +33,7 @@ const TablesPage = async () => {
 
       <div className="flex flex-col gap-10">
         {/* <TableOne /> */}
-        <TableTwo data={data || []} />
+        <TableTwo />
       </div>
     </>
   );
