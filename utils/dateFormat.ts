@@ -54,6 +54,10 @@ export const dateFormat = (date: string) => {
   return {
     time: `${jam}:${menit}:${detik}`,
     day: namaHari,
-    date: `${tanggal}-${namaBulan}-${tahun}`,
+    date: `${tanggal} ${namaBulan} ${tahun}`,
   };
 };
+
+export function formatDatetime(date: string) {
+  return `${date}T00:00:00.000000+00:00`;
+}

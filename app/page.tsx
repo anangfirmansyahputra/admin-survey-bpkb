@@ -19,6 +19,26 @@ const fetchPenilaian = async (value: string) => {
   return { data, error, count }
 }
 
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth() + 1; // Ingat, bulan dimulai dari 0
+const day = today.getDate();
+
+const todayString = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+
+const fetchDataForToday = async () => {
+  const { data, error } = await supabase
+    .from("pelanggan")
+    .select("*")
+    .gte("created_at", todayString + "T00:00:00.000Z")
+    .lt("created_at", todayString + "T23:59:59.999Z");
+
+  // Handle error if needed
+
+  // Data pelanggan yang dibuat hari ini
+  console.log(data);
+};
+
 
 export default async function Home() {
   const { data: lastData, error } = await supabase
@@ -31,6 +51,8 @@ export default async function Home() {
   const totalPuas = await fetchPenilaian("2")
   const totalCukup = await fetchPenilaian("1")
   const totalTidakPuas = await fetchPenilaian("0")
+
+  await fetchDataForToday();
 
   return (
     <>

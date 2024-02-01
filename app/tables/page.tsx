@@ -1,9 +1,8 @@
-
-import { supabase } from "@/utils/supabase";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import TableOne from "@/components/Tables/TableOne";
-import TableThree from "@/components/Tables/TableThree";
 import TableTwo from "@/components/Tables/TableTwo";
+import { supabase } from "@/utils/supabase";
+
+export const revalidate = 1;
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
@@ -16,8 +15,7 @@ const TablesPage = async () => {
   const { data, error: err } = await supabase
     .from("pelanggan")
     .select()
-    .order("created_at", { ascending: false })
-
+    .order("created_at", { ascending: false });
 
   return (
     <>
