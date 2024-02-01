@@ -21,7 +21,7 @@ const Chart = () => {
         </div>
         <ChartOne />
         <ChartTwo />
-        <ChartThree />
+        {/* <ChartThree /> */}
       </div>
     </>
   );

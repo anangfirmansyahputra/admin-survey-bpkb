@@ -18,7 +18,8 @@ const MapOne = dynamic(() => import("../Maps/MapOne"), {
 
 
 const ECommerce = ({ lastData, totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: {
-  lastData: any[], totalSangatPuas: any,
+  lastData: any[],
+  totalSangatPuas: any,
   totalPuas: any,
   totalCukup: any,
   totalTidakPuas: any
