@@ -1,3 +1,5 @@
+
+import { supabase } from "@/utils/supabase";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import TableOne from "@/components/Tables/TableOne";
 import TableThree from "@/components/Tables/TableThree";
@@ -10,15 +12,20 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-const TablesPage = () => {
+const TablesPage = async () => {
+  const { data, error: err } = await supabase
+    .from("pelanggan")
+    .select()
+    .order("created_at", { ascending: false })
+
+
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="Daftar Penilaian" />
 
       <div className="flex flex-col gap-10">
-        <TableOne />
-        <TableTwo />
-        <TableThree />
+        {/* <TableOne /> */}
+        <TableTwo data={data || []} />
       </div>
     </>
   );
