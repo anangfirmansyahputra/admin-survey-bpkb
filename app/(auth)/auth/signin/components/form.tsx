@@ -1,7 +1,6 @@
 "use client";
 
 import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Swal from "sweetalert2";
@@ -21,7 +20,11 @@ export default function Form() {
 
       router.push("/dashboard");
     } catch (err) {
-      // Swal.
+      Swal.fire({
+        title: "Gagal",
+        text: "Username atau Password Salah",
+        icon: "error",
+      });
     }
   };
 
