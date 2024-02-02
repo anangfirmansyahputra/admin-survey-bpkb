@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  basePath: "/dashboard",
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
