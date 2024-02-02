@@ -14,22 +14,67 @@ export default function Form() {
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const exportPdf = async () => {
-    const doc = new jsPDF({ orientation: "portrait" });
-
-    const fontSize = 12;
-    doc.setFontSize(fontSize);
-    const text = "SURVEY KEPUASAN PELAYANAN BPKB DITLANTAS POLDA BALI";
-
-    // Menghitung lebar teks
+  const getWidthText = (doc: any, text: string) => {
     const textWidth = doc.getTextWidth(text);
 
     // Menghitung posisi X agar teks berada di tengah
     const pageWidth = doc.internal.pageSize.width;
     const xPosition = (pageWidth - textWidth) / 2;
 
+    return xPosition;
+  };
+
+  const exportPdf = async () => {
+    const doc = new jsPDF({ orientation: "portrait" });
+
+    const fontSize = 13;
+    doc.setFontSize(fontSize);
+    doc.setFont("Helvetica", "", "bold");
+    const text = "SURVEY KEPUASAN PELAYANAN BPKB DITLANTAS POLDA BALI";
+
+    // Menghitung lebar teks
+
     // Menambahkan teks di tengah dokumen
-    doc.text(text, xPosition, 20);
+    doc.text(text, getWidthText(doc, text), 20);
+    doc.text(
+      "DIREKTORAT LALU LINTAS POLDA BALI",
+      getWidthText(doc, "DIREKTORAT LALU LINTAS POLDA BALI"),
+      30
+    );
+
+    doc.addImage("/images/template.png", "PNG", 15, 50, 180, 180);
+    doc.setFontSize(8);
+    doc.setFont("Helvetica", "", "bold");
+    doc.setTextColor("#ffffff");
+
+    let date = "";
+
+    if (startDate === endDate) {
+      const newDate = new Date(startDate);
+      date = newDate.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    } else {
+      const newDate = new Date(startDate);
+      const endNewDate = new Date(endDate);
+
+      date = `${newDate.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })} - ${endNewDate.toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })}`;
+    }
+
+    // const date = "1 Februari 2023 - 30 Februari 2023";
+    doc.text(date, getWidthText(doc, date), 223);
+
+    doc.addPage("a4", "p");
 
     // @ts-ignore
     doc.autoTable({
@@ -76,10 +121,18 @@ export default function Form() {
           to: endDate,
         });
 
-        setData(data.data);
-        await new Promise((resolve) => setTimeout(resolve, 2));
+        if (data.data.length > 0) {
+          setData(data.data);
+          await new Promise((resolve) => setTimeout(resolve, 10));
 
-        exportPdf();
+          exportPdf();
+        } else {
+          Swal.fire({
+            title: "Gagal",
+            text: "Tidak ada data pada rentan waktu yang diminta",
+            icon: "error",
+          });
+        }
       }
     } catch (err) {
       Swal.fire({
@@ -164,12 +217,12 @@ export default function Form() {
           </tr>
           <tr>
             <td>3</td>
-            <td>Cukup</td>
+            <td>Cukup Puas</td>
             <td>{data.filter((item) => item.kepuasan === "1").length}</td>
           </tr>
           <tr>
             <td>4</td>
-            <td>Tidak Puas</td>
+            <td>Kurang Puas</td>
             <td>{data.filter((item) => item.kepuasan === "0").length}</td>
           </tr>
           <tr>
@@ -179,29 +232,33 @@ export default function Form() {
         </tbody>
       </table>
 
-      <table id="my-table" className="hidden">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Kepuasan</th>
-            <th>Tanggal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item, key) => {
-            const findItem = items.find((i) => i.id === Number(item.kepuasan));
-            const { date, day, time } = dateFormat(item.created_at);
+      {data.length > 0 && (
+        <table id="my-table" className="hidden">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Kepuasan</th>
+              <th>Tanggal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, key) => {
+              const findItem = items.find(
+                (i) => i.id === Number(item.kepuasan)
+              );
+              const { date, day, time } = dateFormat(item.created_at);
 
-            return (
-              <tr key={key}>
-                <td>{key + 1}</td>
-                <td>{findItem?.text}</td>
-                <td>{`${day}, ${date} pukul ${time} WIB`}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={key}>
+                  <td>{key + 1}</td>
+                  <td>{findItem?.text}</td>
+                  <td>{`${day}, ${date}, ${time}`}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

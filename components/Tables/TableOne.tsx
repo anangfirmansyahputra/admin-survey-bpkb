@@ -28,7 +28,7 @@ const data = [
 
   {
     id: 1,
-    text: "Cukup",
+    text: "Cukup Puas",
     icon: Meh,
     value: 2,
     time: "12.00",
@@ -37,7 +37,7 @@ const data = [
   },
   {
     id: 0,
-    text: "Tidak Puas",
+    text: "Kurang Puas",
     icon: Frown,
     value: 1,
     time: "12.00",

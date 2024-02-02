@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const TablesPage = async () => {
   // const { data, error } = await supabase
-  //   .from("pelanggan")
+  //   .from("users")
   //   .select()
   //   .order("created_at", { ascending: false });
 
@@ -22,7 +22,7 @@ const TablesPage = async () => {
   //   error: err,
   //   count,
   // } = await supabase
-  //   .from("pelanggan")
+  //   .from("users")
   //   .select("*", { count: "exact", head: true });
 
   // console.log({ count });

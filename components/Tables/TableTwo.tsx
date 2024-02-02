@@ -36,7 +36,7 @@ const items = [
 
   {
     id: 1,
-    text: "Cukup",
+    text: "Cukup Puas",
     icon: Meh,
     value: 2,
     time: "12.00",
@@ -45,7 +45,7 @@ const items = [
   },
   {
     id: 0,
-    text: "Tidak Puas",
+    text: "Kurang Puas",
     icon: Frown,
     value: 1,
     time: "12.00",
@@ -116,6 +116,7 @@ const TableTwo = () => {
         return;
       } else {
         await fetchData(0, startDate, endDate);
+        setPage(0);
       }
     } catch (err) {
       Swal.fire({

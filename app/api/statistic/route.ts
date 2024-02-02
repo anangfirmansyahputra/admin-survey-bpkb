@@ -18,7 +18,7 @@ const fetchData = async (
     error: err,
     count,
   } = await supabase
-    .from("pelanggan")
+    .from("users")
     .select("*", { count: "exact", head: true })
     .eq("kepuasan", kepuasan)
     // .order("created_at", { ascending: false });

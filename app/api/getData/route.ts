@@ -16,9 +16,9 @@ export async function POST(request: Request, res: Response) {
     const endDatetime = addOneDay(formatDatetime(to));
 
     const { data, error: err } = await supabase
-      .from("pelanggan")
+      .from("users")
       .select("*")
-      // .order("created_at", { ascending: false });
+      .order("created_at", { ascending: true })
       .gte("created_at", startDateTime)
       .lte("created_at", endDatetime);
 

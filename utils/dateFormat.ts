@@ -2,13 +2,13 @@ export const dateFormat = (date: string) => {
   const dateTime = new Date(date);
 
   // Mendapatkan jam
-  const jam = dateTime.getHours();
+  const jam = String(dateTime.getHours()).padStart(2, "0");
 
   // Mendapatkan menit
-  const menit = dateTime.getMinutes();
+  const menit = String(dateTime.getMinutes()).padStart(2, "0");
 
   // Mendapatkan detik
-  const detik = dateTime.getSeconds();
+  const detik = String(dateTime.getSeconds()).padStart(2, "0");
 
   // Mendapatkan hari (dalam bentuk angka, dimulai dari Minggu)
   const hari = dateTime.getDay();

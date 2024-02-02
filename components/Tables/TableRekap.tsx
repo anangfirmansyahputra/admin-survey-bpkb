@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { Product } from "@/types/product";
@@ -28,7 +28,7 @@ const items = [
 
   {
     id: 1,
-    text: "Cukup",
+    text: "Cukup Puas",
     icon: Meh,
     value: 2,
     time: "12.00",
@@ -37,7 +37,7 @@ const items = [
   },
   {
     id: 0,
-    text: "Tidak Puas",
+    text: "Kurang Puas",
     icon: Frown,
     value: 1,
     time: "12.00",
@@ -55,9 +55,8 @@ const TableRekap = ({ data }: { data: any[] }) => {
         </h4>
         <Link
           href="#"
-          onClick={() => alert('asdasd')}
-          className="inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-        >
+          onClick={() => alert("asdasd")}
+          className="inline-flex items-center justify-center bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10">
           Buat Rekap
         </Link>
       </div>
@@ -78,41 +77,35 @@ const TableRekap = ({ data }: { data: any[] }) => {
       </div>
 
       {data.map((product, key) => {
-        const { date, day, time } = dateFormat(product.created_at)
+        const { date, day, time } = dateFormat(product.created_at);
         const findData = items.find(
           (item) => item.id === Number(product.kepuasan)
         );
 
         if (findData) {
           return (
-            (
-              <div
-                className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-4 md:px-6 2xl:px-7.5"
-                key={key}>
-                <div className="col-span-1 flex items-center">
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <findData.icon className="w-8 h-8" />
-                    <p className="text-sm text-black dark:text-white">
-                      {findData.text}
-                    </p>
-                  </div>
-                </div>
-                <div className="col-span-1 hidden items-center sm:flex">
+            <div
+              className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-4 md:px-6 2xl:px-7.5"
+              key={key}>
+              <div className="col-span-1 flex items-center">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <findData.icon className="w-8 h-8" />
                   <p className="text-sm text-black dark:text-white">
-                    {time}
+                    {findData.text}
                   </p>
-                </div>
-                <div className="col-span-1 flex items-center">
-                  <p className="text-sm text-black dark:text-white">
-                    {day}
-                  </p>
-                </div>
-                <div className="col-span-1 flex items-center">
-                  <p className="text-sm text-black dark:text-white">{date}</p>
                 </div>
               </div>
-            )
-          )
+              <div className="col-span-1 hidden items-center sm:flex">
+                <p className="text-sm text-black dark:text-white">{time}</p>
+              </div>
+              <div className="col-span-1 flex items-center">
+                <p className="text-sm text-black dark:text-white">{day}</p>
+              </div>
+              <div className="col-span-1 flex items-center">
+                <p className="text-sm text-black dark:text-white">{date}</p>
+              </div>
+            </div>
+          );
         }
       })}
     </div>
