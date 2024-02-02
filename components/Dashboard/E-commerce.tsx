@@ -65,25 +65,17 @@ const ECommerce = ({
             title={"Total Hari Ini"}
             total={item.text}
             rate={item.value.toString()}
-            levelUp>
+            levelUp={item.value === 0 ? false : true}>
             <item.icon className="text-[#3C50E0] dark:text-white" />
           </CardDataStats>
         ))}
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        {/* <ChartOne /> */}
-        {/* <ChartTwo /> */}
-        {/* <MapOne /> */}
         <div className="col-span-12 xl:col-span-7">
           <TableOne lastData={lastData} />
         </div>
-        <ChartThree
-          totalCukup={totalCukup}
-          totalPuas={totalPuas}
-          totalSangatPuas={totalSangatPuas}
-          totalTidakPuas={totalTidakPuas}
-        />
+        <ChartThree />
       </div>
     </>
   );

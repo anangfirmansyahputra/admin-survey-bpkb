@@ -1,7 +1,8 @@
 "use client";
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import axios from "axios";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -10,21 +11,23 @@ interface ChartThreeState {
   series: number[];
 }
 
-const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: {
-  totalSangatPuas: any,
-  totalPuas: any,
-  totalCukup: any,
-  totalTidakPuas: any
-}) => {
+const ChartThree = () => {
+  const [montly, setMontly] = useState("0");
   const [state, setState] = useState<ChartThreeState>({
-    series: [totalSangatPuas.count, totalPuas.count, totalCukup.count, totalTidakPuas.count],
+    series: [25, 25, 25, 25],
   });
 
   const percentage = (number: number) => {
-    const total = ((number) / (totalSangatPuas.count + totalPuas.count + totalCukup.count + totalTidakPuas.count)) * 100
+    const total =
+      (number /
+        (state.series[0] +
+          state.series[1] +
+          state.series[2] +
+          state.series[3])) *
+      100;
 
     return total.toFixed(1);
-  }
+  };
 
   const options: ApexOptions = {
     chart: {
@@ -68,6 +71,34 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
     ],
   };
 
+  useEffect(() => {
+    const startOfMonth = new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      1
+    ).toISOString();
+    const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
+    const today = new Date().toISOString();
+
+    const fetchData = async () => {
+      const { data } = await axios.post("/api/statistic", {
+        start: montly === "0" ? startOfMonth : startOfYear,
+        to: today,
+      });
+
+      setState({
+        series: [
+          data.totalCukup,
+          data.totalPuas,
+          data.totalSangatPuas,
+          data.totalTidakPuas,
+        ],
+      });
+    };
+
+    fetchData();
+  }, [montly]);
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
@@ -81,9 +112,10 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
             <select
               name=""
               id=""
+              onChange={(e) => setMontly(e.target.value)}
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none">
-              <option value="">Monthly</option>
-              <option value="">Yearly</option>
+              <option value="0">Monthly</option>
+              <option value="1">Yearly</option>
             </select>
             <span className="absolute top-1/2 right-3 z-10 -translate-y-1/2">
               <svg
@@ -124,7 +156,7 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#10B981]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span>Sangat Puas</span>
-              <span>{percentage(totalSangatPuas.count)}%</span>
+              <span>{percentage(state.series[0])}%</span>
             </p>
           </div>
         </div>
@@ -133,7 +165,7 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#375E83]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Puas </span>
-              <span>{percentage(totalPuas.count)}%</span>
+              <span>{percentage(state.series[1])}%</span>
             </p>
           </div>
         </div>
@@ -142,7 +174,7 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#259AE6]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Cukup </span>
-              <span>{percentage(totalCukup.count)}%</span>
+              <span>{percentage(state.series[2])}%</span>
             </p>
           </div>
         </div>
@@ -151,7 +183,7 @@ const ChartThree = ({ totalCukup, totalPuas, totalSangatPuas, totalTidakPuas }: 
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFA70B]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
               <span> Tidak Puas </span>
-              <span>{percentage(totalTidakPuas.count)}%</span>
+              <span>{percentage(state.series[3])}%</span>
             </p>
           </div>
         </div>
