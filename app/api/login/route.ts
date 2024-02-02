@@ -11,9 +11,12 @@ export async function POST(request: Request, res: Response) {
 
     const secret = process.env.JWT_SECRET || "";
 
+    console.log(process.env.SECRET_USERNAME);
+    console.log(process.env.SECRET_PASSWORD);
+
     if (
-      username === process.env.USERNAME &&
-      password === process.env.PASSWORD
+      username === process.env.SECRET_USERNAME &&
+      password === process.env.SECRET_PASSWORD
     ) {
       const token = sign(
         {
