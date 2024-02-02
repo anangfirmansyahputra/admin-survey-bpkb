@@ -90,7 +90,8 @@ export default function Form() {
       startY: 85,
     });
 
-    doc.save("data.pdf");
+    const nameFile = `Data Survey Kepuasan ${date}.pdf`;
+    doc.save(nameFile);
   };
 
   const handleFormSubmit = async (event: any) => {
