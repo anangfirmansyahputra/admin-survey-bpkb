@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import Image from "next/image";
-import { Database } from "lucide-react";
+import { Database, Plus } from "lucide-react";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -187,6 +187,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   }`}>
                   <Database className="w-[18px] h-[19px]" />
                   Rekap Data
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/insert"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes("insert") && "bg-graydark dark:bg-meta-4"
+                  }`}>
+                  <Plus className="w-[18px] h-[19px]" />
+                  Tambah Data
                 </Link>
               </li>
               {/* <!-- Menu Item Tables --> */}

@@ -18,8 +18,11 @@ const fetchData = async (
     error: err,
     count,
   } = await supabase
-    .from("users")
-    .select("*", { count: "exact", head: true })
+    .from(process.env.TABLES_SECRET || "")
+    .select("*", {
+      count: "exact",
+      head: true,
+    })
     .eq("kepuasan", kepuasan)
     // .order("created_at", { ascending: false });
     .gte("created_at", startDateTime)

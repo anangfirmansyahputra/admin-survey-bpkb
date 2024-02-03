@@ -12,27 +12,11 @@ export const metadata: Metadata = {
 };
 
 const TablesPage = async () => {
-  // const { data, error } = await supabase
-  //   .from("users")
-  //   .select()
-  //   .order("created_at", { ascending: false });
-
-  // const {
-  //   data: test,
-  //   error: err,
-  //   count,
-  // } = await supabase
-  //   .from("users")
-  //   .select("*", { count: "exact", head: true });
-
-  // console.log({ count });
-
   return (
     <>
       <Breadcrumb pageName="Daftar Penilaian" />
 
       <div className="flex flex-col gap-10">
-        {/* <TableOne /> */}
         <TableTwo />
       </div>
     </>

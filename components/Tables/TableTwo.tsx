@@ -1,16 +1,20 @@
 "use client";
 
 import { dateFormat } from "@/utils/dateFormat";
-import { supabase } from "@/utils/supabase";
+import { supabase } from "@/utils/supabaseClient";
 import axios from "axios";
 import {
   ArrowDownNarrowWide,
   ChevronDown,
+  Edit2,
   Frown,
   Laugh,
   Meh,
   Smile,
+  Trash,
 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -64,6 +68,7 @@ const TableTwo = () => {
   const [totalData, setTotalData] = useState(0);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const navigate = useRouter();
 
   const fetchData = async (page: number, start?: string, to?: string) => {
     const { data } = await axios.post(`/api/pagination`, {
@@ -129,6 +134,44 @@ const TableTwo = () => {
       setEndDate("");
       setIsLoading(false);
     }
+  };
+
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Apakah anda yakin?",
+      text: "Data akan dihapus selamanya",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const { error } = await supabase
+          .from(process.env.TABLES_SECRET || "")
+          .delete()
+          .eq("id", id);
+
+        if (error) {
+          Swal.fire({
+            title: "Gagal",
+            text: "Menghapus data gagal, silahkan coba kembali",
+            icon: "error",
+          });
+        } else {
+          Swal.fire({
+            title: "Terhapus",
+            text: "Data telah terhapus",
+            icon: "success",
+          });
+
+          await fetchData(page, startDate, endDate);
+        }
+        setIsLoading(false);
+      }
+    });
   };
 
   return (
@@ -197,7 +240,7 @@ const TableTwo = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-5 md:px-6 2xl:px-7.5">
+        <div className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5">
           <div className="col-span-1 hidden md:flex items-center">
             <p className="font-medium">No</p>
           </div>
@@ -212,6 +255,9 @@ const TableTwo = () => {
           </div>
           <div className="col-span-1 hidden md:flex items-center">
             <p className="font-medium">Tanggal</p>
+          </div>
+          <div className="col-span-1 hidden md:flex items-center">
+            <p className="font-medium">Aksi</p>
           </div>
           <div className="col-span-2 md:hidden flex items-center">
             <p className="font-medium">Waktu</p>
@@ -236,7 +282,7 @@ const TableTwo = () => {
             if (findData) {
               return (
                 <div
-                  className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-5 md:px-6 2xl:px-7.5"
+                  className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5"
                   key={key}>
                   <div className="col-span-1 hidden items-center md:flex">
                     <p className="text-sm text-black dark:text-white">
@@ -260,6 +306,21 @@ const TableTwo = () => {
                   </div>
                   <div className="col-span-1 hidden md:flex items-center">
                     <p className="text-sm text-black dark:text-white">{date}</p>
+                  </div>
+                  <div className="col-span-1 space-x-5 hidden md:flex items-center">
+                    <div
+                      onClick={() =>
+                        !isLoading &&
+                        navigate.push(`/dashboard/edit/${product.id}`)
+                      }
+                      className="bg-[#f59e0b] cursor-pointer p-2 rounded hover:bg-[#fb923c] transition-colors">
+                      <Edit2 className="w-5 h-5 text-[#fff]" />
+                    </div>
+                    <div
+                      className="bg-[#f87171] cursor-pointer p-2 rounded hover:bg-[#ef4444] transition-colors"
+                      onClick={() => !isLoading && handleDelete(product.id)}>
+                      <Trash className="w-5 h-5 text-[#fff]" />
+                    </div>
                   </div>
                   <div className="col-span-1 md:hidden flex items-center">
                     <p className="text-sm text-black dark:text-white">{`${day}, ${date} pukul ${time} WIB`}</p>

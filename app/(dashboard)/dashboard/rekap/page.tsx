@@ -10,9 +10,11 @@ export const metadata: Metadata = {
 
 const FormLayout = async () => {
   const { data, error: err } = await supabase
-    .from("users")
+    .from(process.env.TABLES_SECRET || "")
     .select()
-    .order("created_at", { ascending: false });
+    .order("created_at", {
+      ascending: false,
+    });
 
   return (
     <>

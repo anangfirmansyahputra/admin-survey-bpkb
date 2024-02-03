@@ -12,8 +12,10 @@ export const metadata: Metadata = {
 
 const fetchPenilaian = async (value: string) => {
   const { data, error, count } = await supabase
-    .from("users")
-    .select("kepuasan", { count: "exact" })
+    .from(process.env.TABLES_SECRET || "")
+    .select("kepuasan", {
+      count: "exact",
+    })
     .eq("kepuasan", value);
 
   return { data, error, count };
@@ -33,8 +35,10 @@ const fetchDataForToday = async (value: string) => {
   const todayEnd = new Date().toISOString(); // Hari ini hingga waktu sekarang
 
   const { data, error, count } = await supabase
-    .from("users")
-    .select("kepuasan", { count: "exact" })
+    .from(process.env.TABLES_SECRET || "")
+    .select("kepuasan", {
+      count: "exact",
+    })
     .eq("kepuasan", value)
     .gte("created_at", todayStart)
     .lt("created_at", todayEnd);
@@ -47,7 +51,7 @@ export default async function Home() {
   const todayEnd = new Date().toISOString(); // Hari ini hingga waktu sekarang
 
   const { data: lastData, error } = await supabase
-    .from("users")
+    .from(process.env.TABLES_SECRET || "")
     .select()
     .gte("created_at", todayStart)
     .lt("created_at", todayEnd)

@@ -18,13 +18,16 @@ export async function POST(request: Request, res: Response) {
       const startDateTime = formatDatetime(start);
       const endDatetime = addOneDay(formatDatetime(to));
       const { count } = await supabase
-        .from("users")
-        .select("*", { count: "exact", head: true })
+        .from(process.env.TABLES_SECRET || "")
+        .select("*", {
+          count: "exact",
+          head: true,
+        })
         .gte("created_at", startDateTime)
         .lte("created_at", endDatetime);
 
       const { data, error: err } = await supabase
-        .from("users")
+        .from(process.env.TABLES_SECRET || "")
         .select("*")
         .gte("created_at", startDateTime)
         .lte("created_at", endDatetime)
@@ -51,10 +54,13 @@ export async function POST(request: Request, res: Response) {
       );
     } else {
       const { count } = await supabase
-        .from("users")
-        .select("*", { count: "exact", head: true });
+        .from(process.env.TABLES_SECRET || "")
+        .select("*", {
+          count: "exact",
+          head: true,
+        });
       const { data, error: err } = await supabase
-        .from("users")
+        .from(process.env.TABLES_SECRET || "")
         .select("*")
         .order("created_at", { ascending: desc })
         .range(page * pageSize, (page + 1) * pageSize - 1);

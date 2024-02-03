@@ -16,7 +16,7 @@ export async function POST(request: Request, res: Response) {
     const endDatetime = addOneDay(formatDatetime(to));
 
     const { data, error: err } = await supabase
-      .from("users")
+      .from(process.env.TABLES_SECRET || "")
       .select("*")
       .order("created_at", { ascending: true })
       .gte("created_at", startDateTime)
