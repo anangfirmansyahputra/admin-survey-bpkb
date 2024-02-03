@@ -1,9 +1,6 @@
 export const dateFormat = (date: string) => {
   const dateTime = new Date(date);
 
-  // Menambah 1 jam ke waktu
-  dateTime.setHours(dateTime.getHours() + 1);
-
   // Mendapatkan jam
   const jam = String(dateTime.getHours()).padStart(2, "0");
 
