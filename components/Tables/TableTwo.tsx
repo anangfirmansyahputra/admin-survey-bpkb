@@ -1,7 +1,6 @@
 "use client";
 
 import { dateFormat } from "@/utils/dateFormat";
-import { supabase } from "@/utils/supabaseClient";
 import axios from "axios";
 import {
   ArrowDownNarrowWide,
@@ -13,7 +12,6 @@ import {
   Smile,
   Trash,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -149,12 +147,11 @@ const TableTwo = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        const { error } = await supabase
-          .from(process.env.TABLES_SECRET || "")
-          .delete()
-          .eq("id", id);
+        const { data } = await axios.post(`/api/delete`, {
+          id,
+        });
 
-        if (error) {
+        if (!data.success) {
           Swal.fire({
             title: "Gagal",
             text: "Menghapus data gagal, silahkan coba kembali",

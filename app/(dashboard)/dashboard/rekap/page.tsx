@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Form from "./components/form";
 import { supabase } from "@/utils/supabase";
 export const metadata: Metadata = {
-  title: "Form Layout Page | Next.js E-commerce Dashboard Template",
+  title: "Rekap Data",
   description: "This is Form Layout page for TailAdmin Next.js",
   // other metadata
 };

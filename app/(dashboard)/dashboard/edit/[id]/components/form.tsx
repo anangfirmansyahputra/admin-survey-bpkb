@@ -2,6 +2,7 @@
 
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { supabase } from "@/utils/supabaseClient";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -32,12 +33,13 @@ const FormLayout = ({ id }: { id: string }) => {
     const formattedWaktu =
       dateObj.toISOString().slice(0, 19).replace("T", " ") + ".077+00";
 
-    const { error } = await supabase
-      .from(process.env.TABLES_SECRET || "")
-      .update({ kepuasan, created_at: formattedWaktu })
-      .eq("id", id);
+    const { data } = await axios.post("/api/update", {
+      id,
+      kepuasan,
+      created_at: formattedWaktu,
+    });
 
-    if (error) {
+    if (!data.success) {
       Swal.fire({
         icon: "error",
         title: "Gagal",
@@ -70,13 +72,12 @@ const FormLayout = ({ id }: { id: string }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase
-        .from(process.env.TABLES_SECRET || "")
-        .select()
-        .eq("id", id);
+      const { data } = await axios.post("/api/find", {
+        id,
+      });
 
       if (data) {
-        const dateObj = new Date(data[0].created_at);
+        const dateObj = new Date(data.data.created_at);
         const tahun = dateObj.getFullYear();
         const bulan = (dateObj.getMonth() + 1).toString().padStart(2, "0"); // Tambah 1 karena bulan dimulai dari 0
         const tanggal = dateObj.getDate().toString().padStart(2, "0");
@@ -86,7 +87,7 @@ const FormLayout = ({ id }: { id: string }) => {
         const created_at = `${tahun}-${bulan}-${tanggal}T${jam}:${menit}`;
         const detik = dateObj.getSeconds();
 
-        setKepuasan(data[0].kepuasan);
+        setKepuasan(data.data.kepuasan);
         setWaktu(created_at);
         setDetik(detik.toString());
       } else {

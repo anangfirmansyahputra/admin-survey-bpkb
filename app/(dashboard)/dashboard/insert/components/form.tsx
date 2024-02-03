@@ -1,7 +1,7 @@
 "use client";
 
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { supabase } from "@/utils/supabaseClient";
+import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -29,11 +29,13 @@ const FormLayout = () => {
 
     const formattedWaktu =
       dateObj.toISOString().slice(0, 19).replace("T", " ") + ".077+00";
-    const { error } = await supabase
-      .from(process.env.TABLES_SECRET || "")
-      .insert({ kepuasan, created_at: formattedWaktu });
 
-    if (error) {
+    const { data } = await axios.post(`/api/insert`, {
+      kepuasan,
+      created_at: formattedWaktu,
+    });
+
+    if (!data.success) {
       Swal.fire({
         icon: "error",
         title: "Gagal",

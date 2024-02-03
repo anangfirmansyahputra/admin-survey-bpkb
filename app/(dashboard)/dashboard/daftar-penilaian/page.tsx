@@ -1,14 +1,12 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import TableTwo from "@/components/Tables/TableTwo";
-import { supabase } from "@/utils/supabase";
-
 export const revalidate = 1;
 
 import { Metadata } from "next";
+
 export const metadata: Metadata = {
-  title: "Tables Page | Next.js E-commerce Dashboard Template",
+  title: "Daftar Penilaian",
   description: "This is Tables page for TailAdmin Next.js",
-  // other metadata
 };
 
 const TablesPage = async () => {
