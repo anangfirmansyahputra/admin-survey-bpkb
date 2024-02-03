@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import { supabase } from "@/utils/supabaseClient";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
