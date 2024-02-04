@@ -5,6 +5,8 @@ import Image from "next/image";
 
 import { Laugh, Smile, Meh, Frown } from "lucide-react";
 import { dateFormat } from "@/utils/dateFormat";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const data = [
   {
@@ -46,7 +48,19 @@ const data = [
   },
 ];
 
-const TableOne = ({ lastData }: { lastData: any[] }) => {
+const TableOne = () => {
+  const [lastData, setLastData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.post("/api/last-data", {});
+
+      setLastData(data.data);
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
@@ -86,10 +100,12 @@ const TableOne = ({ lastData }: { lastData: any[] }) => {
           </div>
         ) : (
           lastData.map((brand, key) => {
-            const { date, day, time } = dateFormat(brand.created_at);
+            // @ts-ignore
+            const { date, day, time } = dateFormat(brand?.created_at);
 
             const findData = data.find(
-              (item) => item.id === Number(brand.kepuasan)
+              // @ts-ignore
+              (item) => item.id === Number(brand?.kepuasan)
             );
 
             if (findData) {

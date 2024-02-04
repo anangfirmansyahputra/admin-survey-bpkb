@@ -47,17 +47,6 @@ const fetchDataForToday = async (value: string) => {
 };
 
 export default async function Home() {
-  const todayStart = new Date().toISOString().split("T")[0]; // Hari ini mulai dari waktu 00:00:00
-  const todayEnd = new Date().toISOString(); // Hari ini hingga waktu sekarang
-
-  const { data: lastData, error } = await supabase
-    .from(process.env.TABLES_SECRET || "")
-    .select()
-    .gte("created_at", todayStart)
-    .lt("created_at", todayEnd)
-    .order("created_at", { ascending: false })
-    .limit(5);
-
   const totalSangatPuas = await fetchDataForToday("3");
   const totalPuas = await fetchDataForToday("2");
   const totalCukup = await fetchDataForToday("1");
@@ -66,7 +55,6 @@ export default async function Home() {
   return (
     <>
       <ECommerce
-        lastData={lastData || []}
         totalSangatPuas={totalSangatPuas}
         totalPuas={totalPuas}
         totalCukup={totalCukup}

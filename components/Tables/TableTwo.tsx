@@ -88,7 +88,7 @@ const TableTwo = () => {
 
   useEffect(() => {
     fetchData(page, startDate, endDate);
-  }, [page, isAscending]);
+  }, [isAscending]);
 
   const handleFormSubmit = async (event: any) => {
     event.preventDefault();
@@ -128,8 +128,8 @@ const TableTwo = () => {
         icon: "error",
       });
     } finally {
-      setStartDate("");
-      setEndDate("");
+      // setStartDate("");
+      // setEndDate("");
       setIsLoading(false);
     }
   };
@@ -237,11 +237,11 @@ const TableTwo = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5">
+        <div className="grid grid-cols-3 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5">
           <div className="col-span-1 hidden md:flex items-center">
             <p className="font-medium">No</p>
           </div>
-          <div className="col-span-2 md:col-span-1 flex items-center">
+          <div className="col-span-1 md:col-span-1 flex items-center">
             <p className="font-medium">Tingkat Kepuasan</p>
           </div>
           <div className="col-span-1 hidden items-center md:flex">
@@ -253,11 +253,11 @@ const TableTwo = () => {
           <div className="col-span-1 hidden md:flex items-center">
             <p className="font-medium">Tanggal</p>
           </div>
-          <div className="col-span-1 hidden md:flex items-center">
-            <p className="font-medium">Aksi</p>
-          </div>
-          <div className="col-span-2 md:hidden flex items-center">
+          <div className="col-span-1 md:hidden flex items-center">
             <p className="font-medium">Waktu</p>
+          </div>
+          <div className="col-span-1 items-center">
+            <p className="font-medium">Aksi</p>
           </div>
         </div>
 
@@ -279,14 +279,14 @@ const TableTwo = () => {
             if (findData) {
               return (
                 <div
-                  className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5"
+                  className="grid grid-cols-3 border-t border-stroke py-4.5 px-4 dark:border-strokedark md:grid-cols-6 md:px-6 2xl:px-7.5"
                   key={key}>
                   <div className="col-span-1 hidden items-center md:flex">
                     <p className="text-sm text-black dark:text-white">
                       {key + 1 + page * 10}
                     </p>
                   </div>
-                  <div className="col-span-2 md:col-span-1 flex items-center">
+                  <div className="col-span-1 md:col-span-1 flex items-center">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                       <findData.icon className="w-8 h-8" />
                       <p className="text-sm text-black dark:text-white">
@@ -304,7 +304,10 @@ const TableTwo = () => {
                   <div className="col-span-1 hidden md:flex items-center">
                     <p className="text-sm text-black dark:text-white">{date}</p>
                   </div>
-                  <div className="col-span-1 space-x-5 hidden md:flex items-center">
+                  <div className="col-span-1 md:hidden flex items-center">
+                    <p className="text-sm text-black dark:text-white">{`${day}, ${date} pukul ${time} WIB`}</p>
+                  </div>
+                  <div className="col-span-1 space-x-5 flex items-center">
                     <div
                       onClick={() =>
                         !isLoading &&
@@ -319,9 +322,6 @@ const TableTwo = () => {
                       <Trash className="w-5 h-5 text-[#fff]" />
                     </div>
                   </div>
-                  <div className="col-span-1 md:hidden flex items-center">
-                    <p className="text-sm text-black dark:text-white">{`${day}, ${date} pukul ${time} WIB`}</p>
-                  </div>
                 </div>
               );
             }
@@ -334,6 +334,7 @@ const TableTwo = () => {
             onClick={() => {
               setIsLoading(true);
               setPage(page - 1);
+              fetchData(page - 1, startDate, endDate);
             }}
             disabled={isLoading || page === 0}
             className={`flex w-full justify-center rounded  p-3 font-medium  ${
@@ -351,6 +352,7 @@ const TableTwo = () => {
             onClick={() => {
               setIsLoading(true);
               setPage(page + 1);
+              fetchData(page + 1, startDate, endDate);
             }}
             className={`flex w-full justify-center rounded  p-3 font-medium  ${
               isLoading || !hasNext
