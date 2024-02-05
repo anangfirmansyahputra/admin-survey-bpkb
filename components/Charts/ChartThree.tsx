@@ -72,25 +72,66 @@ const ChartThree = () => {
   };
 
   useEffect(() => {
-    const startOfMonth = new Date(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      1
-    ).toISOString();
-    const startOfYear = new Date(new Date().getFullYear(), 0, 1).toISOString();
     const today = new Date().toISOString();
+    // @ts-ignore
+    let start, to;
+
+    if (montly === "0") {
+      // Jika montly === "0", kirim data dari 00.000 sampai 24.000 pada hari tersebut
+      start = new Date(new Date().setHours(0, 0, 0, 0)).toISOString();
+      to = today;
+    } else if (montly === "1") {
+      // Jika montly === "1", kirim data dari Senin sampai Minggu di periode hari tersebut
+      const currentDay = new Date().getDay();
+      const daysUntilMonday = currentDay === 0 ? 6 : currentDay - 1;
+      const daysFromSunday = 7 - currentDay;
+
+      start = new Date(
+        new Date().setHours(0, 0, 0, 0) - daysUntilMonday * 24 * 60 * 60 * 1000
+      ).toISOString();
+      to = new Date(
+        new Date().setHours(23, 59, 59, 999) +
+          daysFromSunday * 24 * 60 * 60 * 1000
+      ).toISOString();
+    } else if (montly === "2") {
+      // Jika montly === "2", kirim data dari tanggal 1 sampai akhir bulan
+      start = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        1
+      ).toISOString();
+      to = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        0
+      ).toISOString();
+    } else if (montly === "3") {
+      // Jika montly === "3", kirim data dari tanggal 1 Januari sampai akhir Desember
+      start = new Date(new Date().getFullYear(), 0, 1).toISOString();
+      to = new Date(
+        new Date().getFullYear(),
+        11,
+        31,
+        23,
+        59,
+        59,
+        999
+      ).toISOString();
+    }
 
     const fetchData = async () => {
       const { data } = await axios.post("/api/statistic", {
-        start: montly === "0" ? startOfMonth : startOfYear,
-        to: today,
+        // @ts-ignore
+        start,
+        // @ts-ignore
+        to,
       });
 
       setState({
         series: [
-          data.totalCukup,
-          data.totalPuas,
           data.totalSangatPuas,
+          data.totalPuas,
+          data.totalCukup,
           data.totalTidakPuas,
         ],
       });
@@ -114,8 +155,10 @@ const ChartThree = () => {
               id=""
               onChange={(e) => setMontly(e.target.value)}
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none">
-              <option value="0">Monthly</option>
-              <option value="1">Yearly</option>
+              <option value="0">Hari Ini</option>
+              <option value="1">Minggu Ini</option>
+              <option value="2">Bulan Ini</option>
+              <option value="3">Tahun Ini</option>
             </select>
             <span className="absolute top-1/2 right-3 z-10 -translate-y-1/2">
               <svg
@@ -162,7 +205,7 @@ const ChartThree = () => {
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#10B981]"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span>Sangat Puas</span>
-                <span>{percentage(state.series[2])}%</span>
+                <span>{percentage(state.series[0])}%</span>
               </p>
             </div>
           </div>
@@ -180,7 +223,7 @@ const ChartThree = () => {
               <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#259AE6]"></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span> Cukup Puas </span>
-                <span>{percentage(state.series[0])}%</span>
+                <span>{percentage(state.series[2])}%</span>
               </p>
             </div>
           </div>
